@@ -29,14 +29,11 @@ public class AppConfig {
                 .authorizeHttpRequests(Authorize -> Authorize
                         .requestMatchers("/api/admin/**").hasAnyRole("RESTAURANT_OWNER","ADMIN")
                         .requestMatchers("/api/**").authenticated()
-
                         .anyRequest().permitAll()
                 )
                 .addFilterBefore(new JwtTokenValidator(), BasicAuthenticationFilter.class)
                 .csrf(csrf -> csrf.disable())
                 .cors(cors -> cors.configurationSource(corsConfigurationSource()));
-
-
         return http.build();
 
     }
@@ -48,7 +45,7 @@ public class AppConfig {
             public CorsConfiguration getCorsConfiguration(HttpServletRequest request) {
                 CorsConfiguration cfg = new CorsConfiguration();
                 cfg.setAllowedOrigins(Arrays.asList(
-                        "http://localhost:3000",
+                        "http://localhost:3000/",
                         "https://zosh-food.vercel.app",
                         "http://localhost:4200"
                 ));
