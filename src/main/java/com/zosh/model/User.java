@@ -33,6 +33,7 @@ public class User {
     private USER_ROLE role;
 
 
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "customer")
     private List<Order> orders= new ArrayList<>();
 
