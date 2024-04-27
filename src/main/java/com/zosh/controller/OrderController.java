@@ -6,7 +6,9 @@ import com.zosh.model.Order;
 import com.zosh.model.User;
 import com.zosh.request.AddCartItemRequest;
 import com.zosh.request.OrderRequest;
+import com.zosh.response.PaymentResponse;
 import com.zosh.service.OrderService;
+import com.zosh.service.PaymentService;
 import com.zosh.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -25,13 +27,16 @@ public class OrderController {
     @Autowired
     private UserService userService;
 
+    @Autowired
+    private PaymentService paymentService;
     @PostMapping("/order")
-    public ResponseEntity<Order> createOrder(@RequestBody OrderRequest req,
-                                             @RequestHeader("Authorization") String jwt) throws Exception {
+    public ResponseEntity<PaymentResponse> createOrder(@RequestBody OrderRequest req,
+                                                       @RequestHeader("Authorization") String jwt) throws Exception {
 
         User user = userService.findUserByJwtToken(jwt);
         Order order = orderService.createOrder(req,user);
-        return  new ResponseEntity<>(order, HttpStatus.OK);
+        PaymentResponse response= paymentService.createPaymentLink(order);
+        return  new ResponseEntity<>(response, HttpStatus.OK);
     }
 
     @GetMapping("/order/user")
